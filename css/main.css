@@ -1,22 +1,86 @@
 * {
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
-  border: 1px solid red
+  /* color: white; */
+
+  /* border: 1px solid red; */
+}
+
+body {
+  background-color: rgb(14, 7, 137);
+  margin: 0;
+  height: 100%;
 }
 
 h1 {
   text-align: center;
+  color: white;
 }
 
 table {
-    margin: 0 auto; /* Set left and right margins
-     to 'auto' */
-  }
+  color: rgb(246, 239, 70);
+  background-color: rgb(6, 3, 87);
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid rgb(246, 239, 70);
+  width: 100%;
+  max-width: 900px;
+  font-size: 20px;
+}
+
+td {
+  padding: 0 5px;
+  white-space: nowrap;
+}
+
+td:nth-child(n + 1) {
+  border-left: 1px solid rgb(246, 239, 70);
+}
 
 .poker-hands-column {
-    text-align: left;
-  }
+  text-align: left;
+}
 
-  .payout-column {
-    text-align: right;
-  }
+.payout-column {
+  text-align: right;
+}
+
+#winning-card-combination-played {
+  margin: 5px;
+  text-align: center;
+  color: red;
+  text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
+    1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 30px auto;
+  /* justify-content: space-around; */
+}
+
+.hold,
+.cards {
+  text-align: center;
+  color: white;
+}
+
+.display-line-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+footer {
+  text-align: center;
+  padding: 5px;
+}
