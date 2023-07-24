@@ -1,0 +1,22 @@
+* {
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
+  border: 1px solid red
+}
+
+h1 {
+  text-align: center;
+}
+
+table {
+    margin: 0 auto; /* Set left and right margins
+     to 'auto' */
+  }
+
+.poker-hands-column {
+    text-align: left;
+  }
+
+  .payout-column {
+    text-align: right;
+  }

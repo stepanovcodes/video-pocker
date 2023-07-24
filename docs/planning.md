@@ -30,7 +30,7 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 
 10. __Replay:__ Players have the option to play again after the current round is completed.
 
-## A wireframe of your "main" game screen.
+## A wireframe of the "main" game screen.
 ![Video Poker Wireframe](../assets/Video%20Poker%20Wireframe1.png)
 
 ## Pseudocode for the overall game play.
