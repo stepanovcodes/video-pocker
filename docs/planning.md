@@ -4,6 +4,32 @@ Student name: Aleksandr (Alex) Stepanov
 
 ## Game Choice - Video Poker (Jacks or Better)
 
+The history of Video Poker can be traced back to the early 1970s, making it one of the relatively newer casino games compared to traditional card games like poker. The game's origins are intertwined with the development of computer technology and the rise of the video slot machine.
+
+Video Poker gained popularity quickly, as it provided a combination of elements from slot machines and traditional poker. Players found it appealing due to the convenience of playing alone, with no need for interaction with other players or dealers.
+
+### The game content includes the following elements:
+
+1. __Cards:__ The game uses a standard deck of 52 playing cards, excluding jokers. The cards are ranked from 2 to Ace, and each card has a suit (hearts, diamonds, clubs, spades).
+
+2. __Hand Rankings:__ The hand rankings in Jacks or Better follow standard poker hand values, with a pair of Jacks or higher being the minimum qualifying hand to win.
+
+3. __User Interface:__ The game is presented with a graphical user interface (GUI) that displays the player's hand, the paytable, betting options, and game controls.
+
+4. __Paytable:__ The paytable lists the payouts for different winning hands. It includes combinations such as Jacks or Better, Two Pair, Three of a Kind, Straight, Flush, Full House, Four of a Kind, Straight Flush, and Royal Flush.
+
+5. __Bet Options:__ Players can choose the coin value and the number of coins they want to bet per hand.
+
+6. __Deal:__ The game begins with the player being dealt five cards. The player can choose which cards to hold and which to discard.
+
+7. __Draw:__ After selecting the cards to keep, the player clicks the "Draw" button to replace the discarded cards with new ones.
+
+8. __Win Determination:__ The final hand is then evaluated, and the player is paid out according to the paytable if they have a qualifying hand.
+
+9. __Winning Hands:__ The game's main objective is to achieve a winning hand based on the paytable. The lowest qualifying hand is a pair of Jacks or better, which yields a payout.
+
+10. __Replay:__ Players have the option to play again after the current round is completed.
+
 ## A wireframe of your "main" game screen.
 ![Video Poker Wireframe](../assets/Video%20Poker%20Wireframe1.png)
 
