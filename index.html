@@ -22,9 +22,9 @@
     </header>
     <main>
       <section>
-        <table>
+        <table id="pay-table">
           <tr>
-            <td class="poker-hands-column dottd">ROYAL FLUSH</td>
+            <td class="poker-hands-column">ROYAL FLUSH</td>
             <td class="payout-column">250</td>
             <td class="payout-column">500</td>
             <td class="payout-column">750</td>
@@ -41,11 +41,11 @@
           </tr>
           <tr>
             <td class="poker-hands-column">FOUR OF A KIND</td>
+            <td class="payout-column">25</td>
             <td class="payout-column">50</td>
             <td class="payout-column">75</td>
             <td class="payout-column">100</td>
             <td class="payout-column">125</td>
-            <td class="payout-column">25</td>
           </tr>
           <tr>
             <td class="poker-hands-column">FULL HOUSE</td>
@@ -98,34 +98,27 @@
         </table>
       </section>
       <section>
-        <h2 id="winning-card-combination-played">THREE OF A KIND</h2>
+        <h2 id="winning-card-combination-played"></h2>
       </section>
-      <section class="cards-container">
-        <div class="hold">HOLD</div>
-        <div class="hold">HOLD</div>
-        <div class="hold">HOLD</div>
-        <div class="hold">HOLD</div>
-        <div class="hold">HOLD</div>
-        <div class="cards">CARD1</div>
-        <div class="cards">CARD2</div>
-        <div class="cards">CARD3</div>
-        <div class="cards">CARD4</div>
-        <div class="cards">CARD5</div>
-      </section>
+      <section class="holds-container"></section>
+      <section class="cards-container"></section>
+      <!-- <section id="shuffled-deck-container"></section> -->
       <section class="display-line-container">
-        <div>WIN 15</div>
-        <div>BET 5</div>
-        <div>CREDIT: $115.00</div>
+        <div id="result-display"></div>
+        <div id="bet-display"></div>
+        <div id="balance-display"></div>
       </section>
       <section class="button-container">
-        <!-- <button>AUDIO</button> -->
-        <button>REPLAY</button>
-        <button>BET</button>
-        <div>$1</div>
-        <button>MAX BET</button>
-        <button>DEAL/DRAW</button>
+        <button id="sound"></button>
+        <button id="replay">REPLAY</button>
+        <input id="bet-input" type="number" min="1" max="5" step="1" />
+        <button id="coin-value"></button>
+        <button id="max-bet"></button>
+        <button id="deal-draw"></button>
       </section>
     </main>
-    <footer>GAME OVER</footer>
+    <footer>
+      <div id="game-over"></div>
+    </footer>
   </body>
 </html>

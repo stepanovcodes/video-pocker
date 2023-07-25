@@ -37,19 +37,13 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 
 1. Define required constants:
 
-    1.1. Define a deck of cards, represented as an array of card objects. Each card object will have properties like rank (2 to 10, J, Q, K, A) and suit (hearts, diamonds, clubs, spades).
+    1.1. Define ranks (2 to 10, J, Q, K, A) and suits (hearts, diamonds, clubs, spades), represented as arrays of ranks and suits respectively.
 
-    1.2. Define the payout array, which maps the winning hand combinations (e.g., Jacks or Better, Two Pair, Three of a Kind, etc.) to their respective payouts in credits:
+    1.2. Define unshuffled original deck of cards, represented as an array of card objects.
 
-    [[ROYAL FLUSH,        250,     500,     750,     1000,    4000],
-    [STRAIGHT FLUSH,      50,      100,     150,     200,     250],
-    [FOUR OF A KIND,      25,      50,      75,      100,     125],
-    [FULL HOUSE,          9,       18,      27,      36,      45],
-    [FLUSH,               5,       12,      18,      24,      30],
-    [STRAIGHT,            4,       8,       12,      16,      20],
-    [THREE OF A KIND,     3,       6,       9,       12,      15],
-    [TWO PAIR,            2,       4,       6,       8,       10],
-    [JACKS OR BETTER,     1,       2,       3,       4,       5]]
+    1.3. Define the payout array of combination objects, which maps the winning hand combinations (e.g., Jacks or Better, Two Pair, Three of a Kind, etc.) to their respective payouts in credits.
+
+    1.4. Define available options for coin value, represented as an array.
 
 2. Define required variables used to track the state of the game:
 
@@ -60,16 +54,14 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
     2.3 Use a bet amount variable to store the current bet amount.
     
     2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
-    
-    2.5. Use a boolean variable to track whether the player's hand is locked (cards on hold) or not.
 
 3. Store elements on the page:
 
-    3.1. Store five elements that represent the Cards.
+    3.1. Store one element that represents the cards-container section.
 
     3.2. Store one element that represents the Game Over text.
 
-    3.3. Store four elements that represent the two Bet amount displays, and "+"/"-" buttons.
+    3.3. Store two elements that represent the Bet Amount display, and the Bet Input control.
 
     3.4. Store one element that represents the Max Bet Button.
 
