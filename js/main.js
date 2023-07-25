@@ -27,15 +27,15 @@ const ORIGINAL_DECK = buildOriginalDeck(SUITS, RANKS);
 
 //Define payout array of combination objects
 const PAYOUT_ARR = [
-  { combination: `ROYAL FLUSH`, 1: 250, 2: 500, 3: 750, 4: 1000, 5: 4000 },
-  { combination: `STRAIGHT FLUSH`, 1: 50, 2: 100, 3: 150, 4: 200, 5: 250 },
-  { combination: `FOUR OF A KIND`, 1: 25, 2: 50, 3: 75, 4: 100, 5: 125 },
-  { combination: `FULL HOUSE`, 1: 9, 2: 18, 3: 27, 4: 36, 5: 45 },
-  { combination: `FLUSH`, 1: 6, 2: 12, 3: 18, 4: 24, 5: 30 },
-  { combination: `STRAIGHT`, 1: 4, 2: 8, 3: 12, 4: 16, 5: 20 },
-  { combination: `THREE OF A KIND`, 1: 3, 2: 6, 3: 9, 4: 12, 5: 15 },
-  { combination: `TWO PAIR`, 1: 2, 2: 4, 3: 6, 4: 8, 5: 10 },
-  { combination: `JACKS OR BETTER`, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 },
+  { combination: `ROYAL FLUSH`, p1: 250, p2: 500, p3: 750, p4: 1000, p5: 4000 },
+  { combination: `STRAIGHT FLUSH`, p1: 50, p2: 100, p3: 150, p4: 200, p5: 250 },
+  { combination: `FOUR OF A KIND`, p1: 25, p2: 50, p3: 75, p4: 100, p5: 125 },
+  { combination: `FULL HOUSE`, p1: 9, p2: 18, p3: 27, p4: 36, p5: 45 },
+  { combination: `FLUSH`, p1: 6, p2: 12, p3: 18, p4: 24, p5: 30 },
+  { combination: `STRAIGHT`, p1: 4, p2: 8, p3: 12, p4: 16, p5: 20 },
+  { combination: `THREE OF A KIND`, p1: 3, p2: 6, p3: 9, p4: 12, p5: 15 },
+  { combination: `TWO PAIR`, p1: 2, p2: 4, p3: 6, p4: 8, p5: 10 },
+  { combination: `JACKS OR BETTER`, p1: 1, p2: 2, p3: 3, p4: 4, p5: 5 },
 ];
 
 // Define available options for coin value
@@ -54,6 +54,8 @@ let betAmount;
 // 2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
 // 2.5. Use a boolean variable to track whether the player's hand is locked (cards on hold) or not.
 let handArr = [];
+
+let shuffledDeck=[];
 
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
@@ -104,7 +106,77 @@ const winningCombPlayedEl = document.getElementById(
 
 /*----- event listeners -----*/
 
+// 5.1. Handle a player clickings a Card.
+
+// 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
+
+// 5.3. Handle a player clickings the Max Bet Button.
+
+// 5.4. Handle a player clickings the Sound Toggle.
+
+// 5.5. Handle a player clickings the Coin Value image.
+
+// 5.6. Handle a player clickings the the Deal/Draw button.
+
+// 6. Handle a player clickings the Replay button:
+
 /*----- functions -----*/
+function init() {
+  // 4.1.1. Initialize the player's credit balance to a starting amount of $100.
+  creditBalance = 100;
+
+  // 4.1.2. Set the coin value to a default value of 0.25 cents.
+  coinValue = COIN_VALUES[0];
+
+  // 4.1.3. Set the bet amount to a default value of one.
+  betAmount = 1;
+
+   // Create a copy of the originalDeck (leave originalDeck untouched!)
+   shuffledDeck = getNewShuffledDeck();
+//    console.log(shuffledDeck);
+
+  render();
+}
+
+function render() {
+  renderPayTable();
+  renderWinningCombPlayed();
+  renderHoldsContainer();
+  renderCardsContainer();
+}
+
+function renderPayTable() {
+  payTableEl.innerHTML = "";
+  // Let's build the Payout Table as a string of HTML
+  let payTableHtml = "";
+  PAYOUT_ARR.forEach(function (arrItem) {
+    payTableHtml += `<tr>`;
+    for (let key in arrItem) {
+      if (Number(arrItem[key])) {
+        payTableHtml += `<td class="payout-column">${arrItem[key]}</td>`;
+        // console.log(arrItem[key], true);
+      } else {
+        payTableHtml += `<td class="poker-hands-column">${arrItem[key]}</td>`;
+      }
+    }
+    payTableHtml += `</tr>`;
+  });
+  payTableEl.innerHTML = payTableHtml;
+}
+
+function renderWinningCombPlayed() {
+    //Output played winning combination if applicable
+    winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
+}
+
+function renderHoldsContainer(){
+
+};
+
+function renderCardsContainer(){
+
+    renderDeckInContainer(shuffledDeck, cardsContainerEl);
+};
 
 function buildOriginalDeck(suitsArr, ranksArr) {
   const deck = [];
@@ -123,12 +195,6 @@ function buildOriginalDeck(suitsArr, ranksArr) {
   return deck;
 }
 
-function renderNewShuffledDeck() {
-  // Create a copy of the originalDeck (leave originalDeck untouched!)
-  shuffledDeck = getNewShuffledDeck();
-  //   console.log(shuffledDeck);
-  renderDeckInContainer(shuffledDeck, cardsContainerEl);
-}
 
 function getNewShuffledDeck() {
   // Create a copy of the originalDeck (leave originalDeck untouched!)
@@ -149,8 +215,8 @@ function renderDeckInContainer(deck, container) {
   // Let's build the cards as a string of HTML
   let cardsHtml = "";
   deck.forEach(function (card) {
-    cardsHtml += `<div class="card ${card.face}"></div>`;
-    // cardsHtml += `<div class="card back-red"></div>`;
+    // cardsHtml += `<div class="card ${card.face}"></div>`;
+    cardsHtml += `<div class="card back-red"></div>`;
   });
   // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
   // const cardsHtml = deck.reduce(function(html, card) {
@@ -160,5 +226,7 @@ function renderDeckInContainer(deck, container) {
 }
 
 /*----- Start game -----*/
+
+init();
 
 // renderNewShuffledDeck();
