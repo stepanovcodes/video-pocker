@@ -47,18 +47,20 @@ td:nth-child(n + 1) {
 
 #winning-card-combination-played {
   margin: 5px;
-  height:50px;
+  height: 50px;
   text-align: center;
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
 }
 
-.cards-container, .holds-container {
+.cards-container,
+.holds-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-items: center;
   max-width: 900px;
+  min-height: 30px;
   margin: 0 auto;
 }
 
@@ -78,6 +80,35 @@ td:nth-child(n + 1) {
   align-items: center;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.btn {
+  background-color: rgb(246, 239, 70);
+  border-radius: 0;
+}
+
+.bet-buttons-container {
+  display: flex;
+}
+
+.up-down {
+  height: 48px;
+  width: 24px;
+  font-size: 26px;
+  padding: 0;
+  text-align: center;
+}
+#bet-input-container {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  background-color: whitesmoke;
+  justify-content: center; /* Horizontally center the text */
+  align-items: center;
+}
+
+#bet-input {
+  margin: 0;
 }
 
 footer {

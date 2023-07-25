@@ -53,9 +53,11 @@ let betAmount;
 
 // 2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
 // 2.5. Use a boolean variable to track whether the player's hand is locked (cards on hold) or not.
-let handArr = [];
+let hand = [];
 
-let shuffledDeck=[];
+let shuffledDeck = [];
+
+let dealDrawButtonValue;
 
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
@@ -126,23 +128,28 @@ function init() {
   creditBalance = 100;
 
   // 4.1.2. Set the coin value to a default value of 0.25 cents.
-  coinValue = COIN_VALUES[0];
-
+  coinValue = COIN_VALUES[2];
+  console.log(coinValue);
   // 4.1.3. Set the bet amount to a default value of one.
   betAmount = 1;
 
-   // Create a copy of the originalDeck (leave originalDeck untouched!)
-   shuffledDeck = getNewShuffledDeck();
-//    console.log(shuffledDeck);
+  // Create a copy of the originalDeck (leave originalDeck untouched!)
+  shuffledDeck = getNewShuffledDeck();
+  // Getting Hand
+  handArr = DealDrawFromShuffledDeck();
 
+  dealDrawButtonValue = `DEAL`;
+
+  //    console.log(shuffledDeck);
   render();
 }
 
 function render() {
   renderPayTable();
   renderWinningCombPlayed();
-  renderHoldsContainer();
   renderCardsContainer();
+  renderHoldsContainer();
+  renderButtonsContainer();
 }
 
 function renderPayTable() {
@@ -165,18 +172,23 @@ function renderPayTable() {
 }
 
 function renderWinningCombPlayed() {
-    //Output played winning combination if applicable
-    winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
+  //Output played winning combination if applicable
+  winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
 }
 
-function renderHoldsContainer(){
+function renderHoldsContainer() {}
 
-};
+function renderCardsContainer() {
+  renderDeckInContainer(hand, cardsContainerEl);
+}
 
-function renderCardsContainer(){
-
-    renderDeckInContainer(shuffledDeck, cardsContainerEl);
-};
+function renderButtonsContainer() {
+  //set bet input value
+  betInputEl.innerText = betAmount;
+  coinValueEl.innerText = `$${coinValue}`;
+  dealDrawEl.innerText = dealDrawButtonValue;
+  
+}
 
 function buildOriginalDeck(suitsArr, ranksArr) {
   const deck = [];
@@ -195,7 +207,6 @@ function buildOriginalDeck(suitsArr, ranksArr) {
   return deck;
 }
 
-
 function getNewShuffledDeck() {
   // Create a copy of the originalDeck (leave originalDeck untouched!)
   const tempDeck = [...ORIGINAL_DECK];
@@ -208,6 +219,13 @@ function getNewShuffledDeck() {
     newShuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
   }
   return newShuffledDeck;
+}
+
+function DealDrawFromShuffledDeck() {
+  // console.log();
+  for (let i = 0; i < 5; i++) {
+    hand.push(shuffledDeck.splice(0, 1)[0]);
+  }
 }
 
 function renderDeckInContainer(deck, container) {
