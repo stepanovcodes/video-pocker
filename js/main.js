@@ -54,14 +54,22 @@ let betAmount;
 // 2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
 // 2.5. Use a boolean variable to track whether the player's hand is locked (cards on hold) or not.
 let hand = [];
+let inHand;
 
 let shuffledDeck = [];
 
 let dealDrawButtonValue;
 
+let cardEls;
+
+
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
 const cardsContainerEl = document.querySelector(".cards-container");
+
+
+// console.log(cardEls);
+
 
 // 3.2. Store one element that represents the Game Over text.
 const gameOverEl = document.getElementById("game-over");
@@ -111,6 +119,10 @@ const playXCreditsEl = document.getElementById("play-x-credits");
 /*----- event listeners -----*/
 
 // 5.1. Handle a player clickings a Card.
+// function handleClickCard (e) {
+// console.log(e.target);
+
+// }
 
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
 function handleClickBetPlus() {
@@ -146,6 +158,11 @@ function handleClickCoinValue() {
 }
 
 // 5.6. Handle a player clickings the the Deal/Draw button.
+function handleClickDealDraw() {
+  inHand = true;
+  dealDrawButtonValue = `DRAW`;
+  render();
+}
 
 // 6. Handle a player clickings the Replay button:
 function handleClickReplay() {
@@ -176,8 +193,11 @@ function init() {
   replayButtonEl.addEventListener("click", handleClickReplay);
   maxBetEl.addEventListener("click", handleClickMaxBet);
   coinValueEl.addEventListener("click", handleClickCoinValue);
+  dealDrawEl.addEventListener("click", handleClickDealDraw);
+ 
 
-  //    console.log(shuffledDeck);
+  inHand = false;
+
   render();
 }
 
@@ -218,11 +238,17 @@ function renderPayTable() {
 
 function renderWinningCombPlayed() {
   //Output played winning combination if applicable
-  winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
-  if (betAmount === 1) {
-    playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
+  if (!inHand) {
+    winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
+
+    if (betAmount === 1) {
+      playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
+    } else {
+      playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`;
+    }
   } else {
-    playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`;
+    winningCombPlayedEl.innerText = ``;
+    playXCreditsEl.innerText = ``;
   }
 }
 
@@ -230,6 +256,13 @@ function renderHoldsContainer() {}
 
 function renderCardsContainer() {
   renderDeckInContainer(hand, cardsContainerEl);
+  const cardEls = document.querySelectorAll(".cards-container > div");
+  cardEls.forEach((card) => {
+    card.addEventListener(`click`,(evnt) => {
+
+    });
+    // console.log(card);
+  });
 }
 
 function renderDisplayLineContainer() {
@@ -241,8 +274,19 @@ function renderDisplayLineContainer() {
 function renderButtonsContainer() {
   //set bet input value
   betInputEl.innerText = `BET ${betAmount}`;
-  coinValueEl.innerText = `$${coinValue}`;
+  coinValueEl.innerText = `COIN $${coinValue}`;
   dealDrawEl.innerText = dealDrawButtonValue;
+  if (inHand) {
+    betMinusEl.setAttribute(`disabled`, `true`);
+    betPlusEl.setAttribute(`disabled`, `true`);
+    coinValueEl.setAttribute(`disabled`, `true`);
+    maxBetEl.setAttribute(`disabled`, `true`);
+  } else {
+    betMinusEl.removeAttribute(`disabled`);
+    betPlusEl.removeAttribute(`disabled`);
+    coinValueEl.removeAttribute(`disabled`);
+    maxBetEl.removeAttribute(`disabled`);
+  }
 }
 
 function buildOriginalDeck(suitsArr, ranksArr) {
@@ -289,8 +333,11 @@ function renderDeckInContainer(deck, container) {
   // Let's build the cards as a string of HTML
   let cardsHtml = "";
   deck.forEach(function (card) {
-    // cardsHtml += `<div class="card ${card.face}"></div>`;
-    cardsHtml += `<div class="card back-red"></div>`;
+    if (inHand) {
+      cardsHtml += `<div class="card ${card.face}"></div>`;
+    } else {
+      cardsHtml += `<div class="card back-red"></div>`;
+    }
   });
   // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
   // const cardsHtml = deck.reduce(function(html, card) {
@@ -302,5 +349,9 @@ function renderDeckInContainer(deck, container) {
 /*----- Start game -----*/
 
 init();
+
+
+
+
 
 // renderNewShuffledDeck();
