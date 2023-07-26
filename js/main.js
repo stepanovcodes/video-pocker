@@ -62,6 +62,12 @@ let dealDrawButtonValue;
 
 let cardEls;
 
+let winningCombination;
+
+let roundCount;
+
+let winResult;
+
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
 const cardsContainerEl = document.querySelector(".cards-container");
@@ -155,9 +161,30 @@ function handleClickDealDraw() {
   inHand = true;
 
   if (dealDrawButtonValue === `DRAW`) {
-    DrawFromShuffledDeck() ;
+    DrawFromShuffledDeck();
+    winningCombination = checkWinningCombination(hand);
+    // console.log(winningCombination);
+    if (winningCombination) {
+        PAYOUT_ARR.forEach((item)=>{
+            if (item.combination === winningCombination) {
+                winResult = item[`p${betAmount}`];
+                
+            }
+        });
+        
+        creditBalance += winResult*coinValue;
+    }
+    inHand = false;
+    roundCount++;
     dealDrawButtonValue = `DEAL`;
   } else if (dealDrawButtonValue === `DEAL`) {
+    creditBalance -= betAmount * coinValue;
+    winResult = null;
+    inHand = true;
+    // Create a copy of the originalDeck (leave originalDeck untouched!)
+    shuffledDeck = getNewShuffledDeck();
+    // Getting Hand
+    DealFromShuffledDeck();
     dealDrawButtonValue = `DRAW`;
   }
   render();
@@ -186,6 +213,10 @@ function init() {
   DealFromShuffledDeck();
 
   dealDrawButtonValue = `DEAL`;
+
+  winningCombination = ``;
+
+  roundCount = 1;
 
   betMinusEl.addEventListener("click", handleClickBetMinus);
   betPlusEl.addEventListener("click", handleClickBetPlus);
@@ -236,7 +267,7 @@ function renderPayTable() {
 function renderWinningCombPlayed() {
   //Output played winning combination if applicable
   if (!inHand) {
-    winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
+    winningCombPlayedEl.innerText = winningCombination;
 
     if (betAmount === 1) {
       playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
@@ -301,7 +332,9 @@ function renderCardsContainer() {
 function renderDisplayLineContainer() {
   balanceDisplayEl.innerText = `CREDIT: $${creditBalance}`;
   betDisplayEl.innerText = `BET ${betAmount}`;
-  resultDisplayEl.innerText = `WIN 15`;
+  if (winResult) {
+    resultDisplayEl.innerText = `WIN ${winResult}`;
+  } else resultDisplayEl.innerText = ``;
 }
 
 function renderButtonsContainer() {
@@ -327,10 +360,10 @@ function renderDeckInContainer(deck, container) {
   // Let's build the cards as a string of HTML
   let cardsHtml = "";
   deck.forEach(function (card) {
-    if (inHand) {
-      cardsHtml += `<div class="card ${card.face}"></div>`;
-    } else {
+    if (roundCount === 1 && !inHand) {
       cardsHtml += `<div class="card back-red"></div>`;
+    } else {
+      cardsHtml += `<div class="card ${card.face}"></div>`;
     }
   });
   // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
@@ -375,6 +408,7 @@ function getNewShuffledDeck() {
 
 function DealFromShuffledDeck() {
   // console.log();
+
   hand = [];
   for (let i = 0; i < 5; i++) {
     hand.push(shuffledDeck.splice(0, 1)[0]);
@@ -383,14 +417,101 @@ function DealFromShuffledDeck() {
 }
 
 function DrawFromShuffledDeck() {
-    // console.log();
-    hand.forEach( (card,index) => {
-      if (!card.hold)   {
+  // console.log();
+  hand.forEach((card, index) => {
+    if (!card.hold) {
       hand.splice(index, 1, shuffledDeck.splice(0, 1)[0]);
-      }
-    console.log (hand[index]);
-    });
+    }
+    // console.log (hand[index]);
+  });
+}
+
+function checkWinningCombination(cards) {
+  // Count the occurrences of each rank and suit
+  const rankCounts = {};
+  const suitCounts = {};
+  cards.forEach((card) => {
+    rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1;
+    suitCounts[card.suit] = (suitCounts[card.suit] || 0) + 1;
+  });
+
+  // Check for all nine winning combinations, in order of highest to lowest score
+  if (
+    rankCounts["10"] === 1 &&
+    rankCounts["J"] === 1 &&
+    rankCounts["Q"] === 1 &&
+    rankCounts["K"] === 1 &&
+    rankCounts["A"] === 1 &&
+    isSameSuit(cards)
+  ) {
+    // Royal Flush
+    return PAYOUT_ARR[0].combination;
+  } else if (
+    rankCounts["10"] === 1 &&
+    rankCounts["J"] === 1 &&
+    rankCounts["Q"] === 1 &&
+    rankCounts["K"] === 1 &&
+    rankCounts["A"] === 1
+  ) {
+    // Straight Flush
+    return PAYOUT_ARR[1].combination;
+  } else if (Object.values(rankCounts).some((count) => count === 4)) {
+    // Four of a Kind
+    return PAYOUT_ARR[2].combination;
+  } else if (
+    rankCounts["J"] === 2 &&
+    rankCounts["Q"] === 2 &&
+    rankCounts["K"] === 2
+  ) {
+    // Full House
+    return PAYOUT_ARR[3].combination;
+  } else if (Object.values(suitCounts).some((count) => count === 5)) {
+    // Flush
+    return PAYOUT_ARR[4].combination;
+  } else if (
+    (rankCounts["10"] === 1 &&
+      rankCounts["J"] === 1 &&
+      rankCounts["Q"] === 1 &&
+      rankCounts["K"] === 1 &&
+      rankCounts["A"] === 1) ||
+    (rankCounts["2"] === 1 &&
+      rankCounts["3"] === 1 &&
+      rankCounts["4"] === 1 &&
+      rankCounts["5"] === 1 &&
+      rankCounts["A"] === 1)
+  ) {
+    // Straight
+    return PAYOUT_ARR[5].combination;
+  } else if (
+    rankCounts["J"] === 3 ||
+    rankCounts["Q"] === 3 ||
+    rankCounts["K"] === 3 ||
+    rankCounts["A"] === 3
+  ) {
+    // Three of a Kind
+    return PAYOUT_ARR[6].combination;
+  } else if (rankCounts["J"] === 2 && rankCounts["Q"] === 2) {
+    // Two Pair
+    return PAYOUT_ARR[7].combination;
+  } else if (
+    rankCounts["J"] === 2 ||
+    rankCounts["Q"] === 2 ||
+    rankCounts["K"] === 2 ||
+    rankCounts["A"] === 2
+  ) {
+    // One Pair of Jacks or Better
+    return PAYOUT_ARR[8].combination;
+  } else {
+    // No winning combination
+    return ``;
   }
+}
+
+// Helper function to check if all cards have the same suit
+function isSameSuit(cards) {
+  const firstSuit = cards[0].suit;
+  return cards.every((card) => card.suit === firstSuit);
+}
 
 /*----- Start game -----*/
 
