@@ -68,6 +68,8 @@ let roundCount;
 
 let winResult;
 
+let endOfGameText;
+
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
 const cardsContainerEl = document.querySelector(".cards-container");
@@ -126,16 +128,19 @@ const playXCreditsEl = document.getElementById("play-x-credits");
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
 function handleClickBetPlus() {
   if (betAmount < 5) betAmount++;
+  endOfGameText = checkEndOfGame();
   render();
 }
 function handleClickBetMinus() {
   if (betAmount > 1) betAmount--;
+  endOfGameText = checkEndOfGame();
   render();
 }
 
 // 5.3. Handle a player clickings the Max Bet Button.
 function handleClickMaxBet() {
   betAmount = 5;
+  endOfGameText = checkEndOfGame();
   render();
 }
 
@@ -153,6 +158,7 @@ function handleClickCoinValue() {
       break;
     }
   }
+  endOfGameText = checkEndOfGame();
   render();
 }
 
@@ -165,27 +171,27 @@ function handleClickDealDraw() {
     winningCombination = checkWinningCombination(hand);
     // console.log(winningCombination);
     if (winningCombination) {
-        PAYOUT_ARR.forEach((item)=>{
-            if (item.combination === winningCombination) {
-                winResult = item[`p${betAmount}`];
-                
-            }
-        });
-        
-        creditBalance += winResult*coinValue;
+      PAYOUT_ARR.forEach((item) => {
+        if (item.combination === winningCombination) {
+          winResult = item[`p${betAmount}`];
+        }
+      });
+
+      creditBalance += winResult * coinValue;
     }
-    inHand = false;
+    endOfGameText = checkEndOfGame();
     roundCount++;
     dealDrawButtonValue = `DEAL`;
+    inHand = false;
   } else if (dealDrawButtonValue === `DEAL`) {
     creditBalance -= betAmount * coinValue;
     winResult = null;
-    inHand = true;
     // Create a copy of the originalDeck (leave originalDeck untouched!)
     shuffledDeck = getNewShuffledDeck();
     // Getting Hand
     DealFromShuffledDeck();
     dealDrawButtonValue = `DRAW`;
+    inHand = true;
   }
   render();
 }
@@ -217,6 +223,8 @@ function init() {
   winningCombination = ``;
 
   roundCount = 1;
+
+  endOfGameText = ``;
 
   betMinusEl.addEventListener("click", handleClickBetMinus);
   betPlusEl.addEventListener("click", handleClickBetPlus);
@@ -268,9 +276,12 @@ function renderWinningCombPlayed() {
   //Output played winning combination if applicable
   if (!inHand) {
     winningCombPlayedEl.innerText = winningCombination;
-
+    console.log(endOfGameText);
     if (betAmount === 1) {
       playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
+    } else if (endOfGameText) {
+      winningCombPlayedEl.innerText = ``;
+      playXCreditsEl.innerText = endOfGameText;
     } else {
       playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`;
     }
@@ -348,10 +359,25 @@ function renderButtonsContainer() {
     coinValueEl.setAttribute(`disabled`, `true`);
     maxBetEl.setAttribute(`disabled`, `true`);
   } else {
-    betMinusEl.removeAttribute(`disabled`);
-    betPlusEl.removeAttribute(`disabled`);
-    coinValueEl.removeAttribute(`disabled`);
-    maxBetEl.removeAttribute(`disabled`);
+    if (endOfGameText === "GAME OVER") {
+      betMinusEl.setAttribute(`disabled`, `true`);
+      betPlusEl.setAttribute(`disabled`, `true`);
+      coinValueEl.setAttribute(`disabled`, `true`);
+      maxBetEl.setAttribute(`disabled`, `true`);
+      dealDrawEl.setAttribute(`disabled`, `true`);
+    } else if (endOfGameText === "TRY ANOTHER BET") {
+      betMinusEl.removeAttribute(`disabled`);
+      betPlusEl.removeAttribute(`disabled`);
+      coinValueEl.removeAttribute(`disabled`);
+      maxBetEl.removeAttribute(`disabled`);
+      dealDrawEl.setAttribute(`disabled`, `true`);
+    } else {
+      betMinusEl.removeAttribute(`disabled`);
+      betPlusEl.removeAttribute(`disabled`);
+      coinValueEl.removeAttribute(`disabled`);
+      maxBetEl.removeAttribute(`disabled`);
+      dealDrawEl.removeAttribute(`disabled`);
+    }
   }
 }
 
@@ -511,6 +537,22 @@ function checkWinningCombination(cards) {
 function isSameSuit(cards) {
   const firstSuit = cards[0].suit;
   return cards.every((card) => card.suit === firstSuit);
+}
+
+function checkEndOfGame() {
+  let minCoinValue = COIN_VALUES[0];
+  for (let i = 0; i < COIN_VALUES.length; i++) {
+    if (COIN_VALUES[i] < minCoinValue) {
+      minCoinValue = COIN_VALUES[i];
+    }
+  }
+  if (creditBalance - minCoinValue < 0) {
+    return `GAME OVER`;
+  } else if (creditBalance - betAmount * coinValue < 0) {
+    return `TRY ANOTHER BET`;
+  } else {
+    return ``;
+  }
 }
 
 /*----- Start game -----*/
