@@ -20,14 +20,16 @@ h1 {
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
-    position: absolute;
-    top: 50%; /* Move the element 50% from the top of the container */
-      left: 50%; /* Move the element 50% from the left of the container */
-      transform: translate(-50%, -50%); /* Adjust the position to center both horizontally and vertically */
-      z-index: 9999;
-      background-color: blue;
-      padding: 0 20px 0 20px;
-    
+  position: absolute;
+  top: 50%; /* Move the element 50% from the top of the container */
+  left: 50%; /* Move the element 50% from the left of the container */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Adjust the position to center both horizontally and vertically */
+  z-index: 9999;
+  background-color: blue;
+  padding: 0 20px 0 20px;
 }
 
 table {
@@ -48,7 +50,6 @@ td {
 
 td:nth-child(n + 1) {
   border-left: 1px solid rgb(246, 239, 70);
-  
 }
 /* td:nth-child(6) {
 background-color: red;
@@ -88,7 +89,7 @@ background-color: red;
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   height: 60px;
   max-width: 900px;
   margin: 0 auto;
@@ -97,6 +98,8 @@ background-color: red;
 #balance-display,
 #result-display {
   font-size: 36px;
+  width: 250px;
+  text-align: center;
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
@@ -119,6 +122,7 @@ background-color: red;
 .btn {
   background-color: rgb(246, 239, 70);
   border-radius: 0;
+  width: 120px;
 }
 
 .bet-buttons-container {
@@ -127,7 +131,7 @@ background-color: red;
 
 .up-down {
   height: 48px;
-  width: 24px;
+  width: 30px;
   font-size: 26px;
   padding: 0;
   text-align: center;
@@ -135,7 +139,7 @@ background-color: red;
 #bet-input-container {
   display: flex;
   height: 48px;
-  width: 48px;
+  width: 60px;
   background-color: whitesmoke;
   justify-content: center; /* Horizontally center the text */
   align-items: center;

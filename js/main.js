@@ -113,24 +113,45 @@ const playXCreditsEl = document.getElementById("play-x-credits");
 // 5.1. Handle a player clickings a Card.
 
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
-function handleClickBetPlus () {
-    if (betAmount<5) betAmount++;
-    render();
+function handleClickBetPlus() {
+  if (betAmount < 5) betAmount++;
+  render();
 }
-function handleClickBetMinus () {
-    if (betAmount>1) betAmount--;
-    render();
+function handleClickBetMinus() {
+  if (betAmount > 1) betAmount--;
+  render();
 }
 
 // 5.3. Handle a player clickings the Max Bet Button.
+function handleClickMaxBet() {
+  betAmount = 5;
+  render();
+}
 
 // 5.4. Handle a player clickings the Sound Toggle.
 
 // 5.5. Handle a player clickings the Coin Value image.
+function handleClickCoinValue() {
+  for (let i = 0; i < COIN_VALUES.length; i++) {
+    if (COIN_VALUES[i] === coinValue) {
+      if (i !== COIN_VALUES.length - 1) {
+        coinValue = COIN_VALUES[i + 1];
+      } else {
+        coinValue = COIN_VALUES[0];
+      }
+      break;
+    }
+  }
+  render();
+}
 
 // 5.6. Handle a player clickings the the Deal/Draw button.
 
 // 6. Handle a player clickings the Replay button:
+function handleClickReplay() {
+  init();
+  render();
+}
 
 /*----- functions -----*/
 function init() {
@@ -138,10 +159,10 @@ function init() {
   creditBalance = 100;
 
   // 4.1.2. Set the coin value to a default value of 0.25 cents.
-  coinValue = COIN_VALUES[2];
-  console.log(coinValue);
+  if (!coinValue) coinValue = COIN_VALUES[2];
+  //   console.log(coinValue);
   // 4.1.3. Set the bet amount to a default value of one.
-  betAmount = 1;
+  if (!betAmount) betAmount = 1;
 
   // Create a copy of the originalDeck (leave originalDeck untouched!)
   shuffledDeck = getNewShuffledDeck();
@@ -152,6 +173,9 @@ function init() {
 
   betMinusEl.addEventListener("click", handleClickBetMinus);
   betPlusEl.addEventListener("click", handleClickBetPlus);
+  replayButtonEl.addEventListener("click", handleClickReplay);
+  maxBetEl.addEventListener("click", handleClickMaxBet);
+  coinValueEl.addEventListener("click", handleClickCoinValue);
 
   //    console.log(shuffledDeck);
   render();
@@ -164,7 +188,6 @@ function render() {
   renderHoldsContainer();
   renderDisplayLineContainer();
   renderButtonsContainer();
-
 }
 
 function renderPayTable() {
@@ -185,16 +208,22 @@ function renderPayTable() {
     payTableHtml += `</tr>`;
   });
   payTableEl.innerHTML = payTableHtml;
-  payoutColumnChosenEls = document.querySelectorAll(`td:nth-child(${betAmount+1})`);
-  payoutColumnChosenEls.forEach((payoutColumnChosenEl)=>{
+  payoutColumnChosenEls = document.querySelectorAll(
+    `td:nth-child(${betAmount + 1})`
+  );
+  payoutColumnChosenEls.forEach((payoutColumnChosenEl) => {
     payoutColumnChosenEl.style.backgroundColor = `red`;
   });
-};
+}
 
 function renderWinningCombPlayed() {
   //Output played winning combination if applicable
   winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
-  playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`
+  if (betAmount === 1) {
+    playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
+  } else {
+    playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`;
+  }
 }
 
 function renderHoldsContainer() {}
@@ -249,6 +278,7 @@ function getNewShuffledDeck() {
 
 function DealDrawFromShuffledDeck() {
   // console.log();
+  hand = [];
   for (let i = 0; i < 5; i++) {
     hand.push(shuffledDeck.splice(0, 1)[0]);
   }
