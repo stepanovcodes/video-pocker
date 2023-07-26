@@ -81,6 +81,11 @@ background-color: red;
   margin: 0 auto;
 }
 
+.holds-container > div {
+    font-size: 20px;
+    color: white;
+}
+
 .cards-container > div:hover {
   margin: 0;
 }

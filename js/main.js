@@ -62,14 +62,11 @@ let dealDrawButtonValue;
 
 let cardEls;
 
-
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
 const cardsContainerEl = document.querySelector(".cards-container");
 
-
 // console.log(cardEls);
-
 
 // 3.2. Store one element that represents the Game Over text.
 const gameOverEl = document.getElementById("game-over");
@@ -119,10 +116,6 @@ const playXCreditsEl = document.getElementById("play-x-credits");
 /*----- event listeners -----*/
 
 // 5.1. Handle a player clickings a Card.
-// function handleClickCard (e) {
-// console.log(e.target);
-
-// }
 
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
 function handleClickBetPlus() {
@@ -160,7 +153,13 @@ function handleClickCoinValue() {
 // 5.6. Handle a player clickings the the Deal/Draw button.
 function handleClickDealDraw() {
   inHand = true;
-  dealDrawButtonValue = `DRAW`;
+
+  if (dealDrawButtonValue === `DRAW`) {
+    DrawFromShuffledDeck() ;
+    dealDrawButtonValue = `DEAL`;
+  } else if (dealDrawButtonValue === `DEAL`) {
+    dealDrawButtonValue = `DRAW`;
+  }
   render();
 }
 
@@ -184,7 +183,7 @@ function init() {
   // Create a copy of the originalDeck (leave originalDeck untouched!)
   shuffledDeck = getNewShuffledDeck();
   // Getting Hand
-  handArr = DealDrawFromShuffledDeck();
+  DealFromShuffledDeck();
 
   dealDrawButtonValue = `DEAL`;
 
@@ -194,7 +193,6 @@ function init() {
   maxBetEl.addEventListener("click", handleClickMaxBet);
   coinValueEl.addEventListener("click", handleClickCoinValue);
   dealDrawEl.addEventListener("click", handleClickDealDraw);
- 
 
   inHand = false;
 
@@ -205,7 +203,6 @@ function render() {
   renderPayTable();
   renderWinningCombPlayed();
   renderCardsContainer();
-  renderHoldsContainer();
   renderDisplayLineContainer();
   renderButtonsContainer();
 }
@@ -252,17 +249,53 @@ function renderWinningCombPlayed() {
   }
 }
 
-function renderHoldsContainer() {}
+function renderHoldsContainer() {
+  const cardEls = document.querySelectorAll(".cards-container > div");
+  if (inHand) {
+    cardEls.forEach((card, index) => {
+      card.addEventListener(`click`, () => {
+        if (hand[index].hold) {
+          hand[index].hold = false;
+        } else {
+          hand[index].hold = true;
+        }
+        // console.log(index, hand[index]);
+        render();
+      });
+    });
+  }
+  //   } else {
+  //     cardEls.forEach((card, index) => {
+  //       card.removeEventListener(`click`, () => {
+  //         if (hand[index].hold) {
+  //           hand[index].hold = false;
+  //         } else {
+  //           hand[index].hold = true;
+  //         }
+  //         console.log(index, hand[index]);
+  //       });
+  //     });
+  //   }
+
+  holdContainerEl.innerHTML = "";
+  // Let's build the cards as a string of HTML
+  let holdsHtml = "";
+  hand.forEach(function (card) {
+    // console.log(card);
+    if (inHand) {
+      if (card.hold) {
+        holdsHtml += `<div>HOLD</div>`;
+      } else {
+        holdsHtml += `<div></div>`;
+      }
+    }
+  });
+  holdContainerEl.innerHTML = holdsHtml;
+}
 
 function renderCardsContainer() {
   renderDeckInContainer(hand, cardsContainerEl);
-  const cardEls = document.querySelectorAll(".cards-container > div");
-  cardEls.forEach((card) => {
-    card.addEventListener(`click`,(evnt) => {
-
-    });
-    // console.log(card);
-  });
+  renderHoldsContainer();
 }
 
 function renderDisplayLineContainer() {
@@ -289,6 +322,24 @@ function renderButtonsContainer() {
   }
 }
 
+function renderDeckInContainer(deck, container) {
+  container.innerHTML = "";
+  // Let's build the cards as a string of HTML
+  let cardsHtml = "";
+  deck.forEach(function (card) {
+    if (inHand) {
+      cardsHtml += `<div class="card ${card.face}"></div>`;
+    } else {
+      cardsHtml += `<div class="card back-red"></div>`;
+    }
+  });
+  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
+  // const cardsHtml = deck.reduce(function(html, card) {
+  //   return html + `<div class="card ${card.face}"></div>`;
+  // }, '');
+  container.innerHTML = cardsHtml;
+}
+
 function buildOriginalDeck(suitsArr, ranksArr) {
   const deck = [];
   // Use nested forEach to generate card objects
@@ -297,8 +348,10 @@ function buildOriginalDeck(suitsArr, ranksArr) {
       deck.push({
         // The 'face' property maps to the library's CSS classes for cards
         face: `${suit}${rank}`,
-        // Setting the 'value' property for game of blackjack, not war
-        // value: Number(rank) || (rank === "A" ? 11 : 10),
+        suit,
+        rank,
+        // Setting the 'hold' property for game of jacks or better
+        hold: false,
       });
     });
   });
@@ -320,38 +373,27 @@ function getNewShuffledDeck() {
   return newShuffledDeck;
 }
 
-function DealDrawFromShuffledDeck() {
+function DealFromShuffledDeck() {
   // console.log();
   hand = [];
   for (let i = 0; i < 5; i++) {
     hand.push(shuffledDeck.splice(0, 1)[0]);
+    // console.log(hand[i]);
   }
 }
 
-function renderDeckInContainer(deck, container) {
-  container.innerHTML = "";
-  // Let's build the cards as a string of HTML
-  let cardsHtml = "";
-  deck.forEach(function (card) {
-    if (inHand) {
-      cardsHtml += `<div class="card ${card.face}"></div>`;
-    } else {
-      cardsHtml += `<div class="card back-red"></div>`;
-    }
-  });
-  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-  // const cardsHtml = deck.reduce(function(html, card) {
-  //   return html + `<div class="card ${card.face}"></div>`;
-  // }, '');
-  container.innerHTML = cardsHtml;
-}
+function DrawFromShuffledDeck() {
+    // console.log();
+    hand.forEach( (card,index) => {
+      if (!card.hold)   {
+      hand.splice(index, 1, shuffledDeck.splice(0, 1)[0]);
+      }
+    console.log (hand[index]);
+    });
+  }
 
 /*----- Start game -----*/
 
 init();
-
-
-
-
 
 // renderNewShuffledDeck();
