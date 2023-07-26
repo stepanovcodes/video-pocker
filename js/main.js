@@ -68,6 +68,8 @@ const gameOverEl = document.getElementById("game-over");
 
 // 3.3. Store two elements that represent the Bet Amount display, and the Bet Input control.
 const betDisplayEl = document.getElementById("bet-display");
+const betPlusEl = document.getElementById("bet-plus");
+const betMinusEl = document.getElementById("bet-minus");
 const betInputEl = document.getElementById("bet-input");
 
 // 3.4. Store one element that represents the Max Bet Button.
@@ -103,7 +105,7 @@ const winningCombPlayedEl = document.getElementById(
 );
 
 // 3.14. Store one element that represents the "Play X credits" message appearing over the screen elements at the beginning of each round.
-// const playXCreditsEl = document.getElementById("play-x-credits");
+const playXCreditsEl = document.getElementById("play-x-credits");
 // console.log(playXCreditsEl);
 
 /*----- event listeners -----*/
@@ -111,6 +113,14 @@ const winningCombPlayedEl = document.getElementById(
 // 5.1. Handle a player clickings a Card.
 
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
+function handleClickBetPlus () {
+    if (betAmount<5) betAmount++;
+    render();
+}
+function handleClickBetMinus () {
+    if (betAmount>1) betAmount--;
+    render();
+}
 
 // 5.3. Handle a player clickings the Max Bet Button.
 
@@ -140,6 +150,9 @@ function init() {
 
   dealDrawButtonValue = `DEAL`;
 
+  betMinusEl.addEventListener("click", handleClickBetMinus);
+  betPlusEl.addEventListener("click", handleClickBetPlus);
+
   //    console.log(shuffledDeck);
   render();
 }
@@ -149,13 +162,16 @@ function render() {
   renderWinningCombPlayed();
   renderCardsContainer();
   renderHoldsContainer();
+  renderDisplayLineContainer();
   renderButtonsContainer();
+
 }
 
 function renderPayTable() {
   payTableEl.innerHTML = "";
   // Let's build the Payout Table as a string of HTML
   let payTableHtml = "";
+  let payoutColumnChosenEls;
   PAYOUT_ARR.forEach(function (arrItem) {
     payTableHtml += `<tr>`;
     for (let key in arrItem) {
@@ -169,11 +185,16 @@ function renderPayTable() {
     payTableHtml += `</tr>`;
   });
   payTableEl.innerHTML = payTableHtml;
-}
+  payoutColumnChosenEls = document.querySelectorAll(`td:nth-child(${betAmount+1})`);
+  payoutColumnChosenEls.forEach((payoutColumnChosenEl)=>{
+    payoutColumnChosenEl.style.backgroundColor = `red`;
+  });
+};
 
 function renderWinningCombPlayed() {
   //Output played winning combination if applicable
   winningCombPlayedEl.innerText = PAYOUT_ARR[6].combination;
+  playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`
 }
 
 function renderHoldsContainer() {}
@@ -182,12 +203,17 @@ function renderCardsContainer() {
   renderDeckInContainer(hand, cardsContainerEl);
 }
 
+function renderDisplayLineContainer() {
+  balanceDisplayEl.innerText = `CREDIT: $${creditBalance}`;
+  betDisplayEl.innerText = `BET ${betAmount}`;
+  resultDisplayEl.innerText = `WIN 15`;
+}
+
 function renderButtonsContainer() {
   //set bet input value
-  betInputEl.innerText = betAmount;
+  betInputEl.innerText = `BET ${betAmount}`;
   coinValueEl.innerText = `$${coinValue}`;
   dealDrawEl.innerText = dealDrawButtonValue;
-  
 }
 
 function buildOriginalDeck(suitsArr, ranksArr) {

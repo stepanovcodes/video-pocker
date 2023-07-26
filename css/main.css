@@ -3,18 +3,31 @@
   box-sizing: border-box;
   /* color: white; */
 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 body {
   background-color: rgb(14, 7, 137);
-  margin: 0;
-  /* height: 100%; */
 }
 
 h1 {
   text-align: center;
   color: white;
+}
+
+#play-x-credits {
+  font-size: 48px;
+  color: red;
+  text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
+    1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
+    position: absolute;
+    top: 50%; /* Move the element 50% from the top of the container */
+      left: 50%; /* Move the element 50% from the left of the container */
+      transform: translate(-50%, -50%); /* Adjust the position to center both horizontally and vertically */
+      z-index: 9999;
+      background-color: blue;
+      padding: 0 20px 0 20px;
+    
 }
 
 table {
@@ -35,8 +48,11 @@ td {
 
 td:nth-child(n + 1) {
   border-left: 1px solid rgb(246, 239, 70);
+  
 }
-
+/* td:nth-child(6) {
+background-color: red;
+} */
 .poker-hands-column {
   text-align: left;
 }
@@ -47,7 +63,7 @@ td:nth-child(n + 1) {
 
 #winning-card-combination-played {
   margin: 5px;
-  height: 50px;
+  height: 40px;
   text-align: center;
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
@@ -72,7 +88,23 @@ td:nth-child(n + 1) {
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  height: 60px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#balance-display,
+#result-display {
+  font-size: 36px;
+  color: red;
+  text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
+    1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
+}
+
+#bet-display {
+  font-size: 24px;
+  color: white;
 }
 
 .button-container {
@@ -80,6 +112,8 @@ td:nth-child(n + 1) {
   align-items: center;
   flex-direction: row;
   justify-content: space-around;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .btn {
@@ -111,7 +145,7 @@ td:nth-child(n + 1) {
   margin: 0;
 }
 
-footer {
+/* footer {
   text-align: center;
   padding: 5px;
-}
+} */
