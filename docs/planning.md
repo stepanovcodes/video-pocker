@@ -31,19 +31,21 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 10. __Replay:__ Players have the option to play again after the current round is completed.
 
 ## A wireframe of the "main" game screen.
-![Video Poker Wireframe](../assets/Video%20Poker%20Wireframe1.png)
+![Video Poker Wireframe](../assets/Video%20Poker%20Wireframe.png)
 
 ## Pseudocode for the overall game play.
 
 1. Define required constants:
 
-    1.1. Define ranks (2 to 10, J, Q, K, A) and suits (hearts, diamonds, clubs, spades), represented as arrays of ranks and suits respectively.
+    1.1 Define suits (hearts, diamonds, clubs, spades), represented as array of suits.
 
-    1.2. Define unshuffled original deck of cards, represented as an array of card objects.
+    1.2. Define ranks (2 to 10, J, Q, K, A), represented as arrays of ranks.
 
-    1.3. Define the payout array of combination objects, which maps the winning hand combinations (e.g., Jacks or Better, Two Pair, Three of a Kind, etc.) to their respective payouts in credits.
+    1.3. Define unshuffled original deck of cards, represented as an array of card objects.
 
-    1.4. Define available options for coin value, represented as an array.
+    1.4. Define the payout array of combination objects, which maps the winning hand combinations (e.g., Jacks or Better, Two Pair, Three of a Kind, etc.) to their respective payouts in credits.
+
+    1.5. Define available options for coin value, represented as an array.
 
 2. Define required variables used to track the state of the game:
 
@@ -53,15 +55,32 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
     
     2.3 Use a bet amount variable to store the current bet amount.
     
-    2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
+    2.4. Use a hand array to represent the player's current hand and whether the player's card is locked (card on hold) or not. The hand will contain card objects from the deck.
+
+    2.5. Use inHand variable to determine if a player is playing the hand at the moment (true) or deciding on bet (false).
+    
+    2.6. Use shuffledDeck variable to store a shuffled deck, excluding cards that have already been dealt or drawn.
+    
+    2.7. Use dealDrawButtonValue variable to store a caption for an alternating button labeled either 'DEAL' or 'DRAW,' depending on whether a player is in possession of cards (in Hand) or not.
+    
+    2.8. Use cardEls variable to store card elements. It cannot be declared in 'cached element references' since the card elements are being dynamically changed.
+    
+    2.9. Use winningCombination variable to store the final winning combination after the hand has been assessed.
+    
+    2.10. Use roundCount variable to store the count of the rounds (hands) within the same game. It is required to determine if it is a first round or not.
+    
+    2.11. Use winResult variable to store the credit score of an individual win round.
+
+    2.12. Use endOfGameText virable to store the end of game text (GAME OVER or TRY ANOTHER BET)
+let endOfGameText.
 
 3. Store elements on the page:
 
     3.1. Store one element that represents the cards-container section.
 
-    3.2. Store one element that represents the Game Over text.
+    3.2. Store element that represents the Bet Amount display
 
-    3.3. Store two elements that represent the Bet Amount display, and the Bet Input control.
+    3.3. Store three elements that represent Bet Input controls.
 
     3.4. Store one element that represents the Max Bet Button.
 
@@ -73,17 +92,15 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 
     3.8. Store one element that represents the Replay button.
 
-    3.9. Store one element that represents the Sound Toggle.
+    3.9. Store one element that represents the Coin Value button.
 
-    3.10. Store one element that represents the Coin Value image.
+    3.10. Store one element that represents the Deal/Draw button.
 
-    3.11. Store one element that represents the Deal/Draw button.
+    3.11. Store one element that represent the holds-container section.
 
-    3.12. Store five elements that represent the Hold texts.
+    3.12. Store one element that represents the winning Card combination played.
 
-    3.13. Store one element that represents the winning Card combination played.
-
-    3.14. Store one element that represents the "Play X credits" message appearing over the screen elements at the beginning of each round.
+    3.13. Store one element that represents the "Play X credits" message appearing over the screen elements at the beginning of each round.
 
 
 
@@ -93,9 +110,25 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 
         4.1.1. Initialize the player's credit balance to a starting amount of $100.
 
-        4.1.2. Set the coin value to a default value of 0.25 cents.
+        4.1.2. Set the coin value to a default value of $1.
 
         4.1.3. Set the bet amount to a default value of one.
+
+        4.1.4. Create a shuffled copy of the originalDeck (leave originalDeck untouched!)
+
+        4.1.5. Getting Hand from shuffledDeck.
+
+        4.1.6. Setting initial caption of "DEAL" for the Deal/Draw button.
+
+        4.1.7 Setting the winning Card combination played to empty string.
+
+        4.1.8 Setting the count of the rounds (hands) to 0.
+
+        4.1.9 Setting the endOfGameText to empty string.
+
+        4.1.10 Setting the inHand variable to false (a player is not playing a hand).
+
+        4.1.11 Setting up six listeners for REPLAY button, +/- Bet buttons, Coin  Value button, BET MAX button and DEAL/DRAW button.
 
 
     4.2. Render those state variables to the page:
@@ -103,17 +136,15 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
 
 5. Handle a player clickings:
 
-    5.1. Handle a player clickings a Card.
+    5.1. Handle a player clickings a Card. The function is inside renderHoldsContainer() since the card elements are dynamically changed within container
 
     5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
 
     5.3. Handle a player clickings the Max Bet Button.
 
-    5.4. Handle a player clickings the Sound Toggle.
+    5.4. Handle a player clickings the Coin Value button.
 
-    5.5. Handle a player clickings the Coin Value image.
-
-    5.6. Handle a player clickings the the Deal/Draw button.
+    5.5. Handle a player clickings the Deal/Draw button.
 
 6. Handle a player clickings the Replay button:
 

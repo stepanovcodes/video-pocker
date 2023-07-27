@@ -1,13 +1,14 @@
 * {
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
-  /* color: white; */
-
+  user-select: none;
   /* border: 1px solid red; */
 }
 
 body {
   background-color: rgb(14, 7, 137);
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -15,18 +16,24 @@ h1 {
   color: white;
 }
 
-#play-x-credits {
+main {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+#game-status {
   font-size: 48px;
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
   position: absolute;
-  top: 50%; /* Move the element 50% from the top of the container */
-  left: 50%; /* Move the element 50% from the left of the container */
+  top: 53%; 
+  left: 50%; 
   transform: translate(
     -50%,
     -50%
-  ); /* Adjust the position to center both horizontally and vertically */
+  );
   z-index: 9999;
   background-color: blue;
   padding: 0 20px 0 20px;
@@ -35,11 +42,9 @@ h1 {
 table {
   color: rgb(246, 239, 70);
   background-color: rgb(6, 3, 87);
-  margin: 0 auto;
   border-collapse: collapse;
   border: 2px solid rgb(246, 239, 70);
   width: 100%;
-  max-width: 900px;
   font-size: 20px;
 }
 
@@ -51,9 +56,7 @@ td {
 td:nth-child(n + 1) {
   border-left: 1px solid rgb(246, 239, 70);
 }
-/* td:nth-child(6) {
-background-color: red;
-} */
+
 .poker-hands-column {
   text-align: left;
 }
@@ -63,27 +66,30 @@ background-color: red;
 }
 
 #winning-card-combination-played {
-  margin: 5px;
-  height: 40px;
+  height: 2.5rem;
   text-align: center;
   color: red;
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
 }
 
-.cards-container,
 .holds-container {
   display: grid;
+  height: 2.5rem;
   grid-template-columns: repeat(5, 1fr);
   justify-items: center;
-  max-width: 900px;
-  min-height: 30px;
-  margin: 0 auto;
+}
+
+.cards-container {
+  display: grid;
+  height: 12rem;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
 }
 
 .holds-container > div {
-    font-size: 20px;
-    color: white;
+  font-size: 20px;
+  color: white;
 }
 
 .cards-container > div:hover {
@@ -95,9 +101,7 @@ background-color: red;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  height: 60px;
-  max-width: 900px;
-  margin: 0 auto;
+  height: 5rem;
 }
 
 #balance-display,
@@ -120,14 +124,12 @@ background-color: red;
   align-items: center;
   flex-direction: row;
   justify-content: space-around;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .btn {
   background-color: rgb(246, 239, 70);
   border-radius: 0;
-  width: 140px;
+  width: 120px;
 }
 
 .bet-buttons-container {
@@ -136,7 +138,7 @@ background-color: red;
 
 .up-down {
   height: 48px;
-  width: 35px;
+  width: 30px;
   font-size: 26px;
   padding: 0;
   text-align: center;
@@ -144,7 +146,7 @@ background-color: red;
 #bet-input-container {
   display: flex;
   height: 48px;
-  width: 70px;
+  width: 60px;
   background-color: whitesmoke;
   justify-content: center; /* Horizontally center the text */
   align-items: center;
@@ -154,8 +156,3 @@ background-color: red;
   margin: 0;
   font-size: 20px;
 }
-
-/* footer {
-  text-align: center;
-  padding: 5px;
-} */

@@ -1,10 +1,8 @@
-console.log(`JS loaded`);
-
 /*----- constants -----*/
-// Define suits
+// 1.1 Define suits
 const SUITS = ["s", "c", "d", "h"];
 
-// Define ranks
+// 1.2 Define ranks
 const RANKS = [
   "02",
   "03",
@@ -21,11 +19,10 @@ const RANKS = [
   "A",
 ];
 
-// Define unshuffled original deck of cards
+// 1.3 Define unshuffled original deck of cards
 const ORIGINAL_DECK = buildOriginalDeck(SUITS, RANKS);
-// console.log(ORIGINAL_DECK);
 
-//Define payout array of combination objects
+// 1.4 Define payout array of combination objects
 const PAYOUT_ARR = [
   { combination: `ROYAL FLUSH`, p1: 250, p2: 500, p3: 750, p4: 1000, p5: 4000 },
   { combination: `STRAIGHT FLUSH`, p1: 50, p2: 100, p3: 150, p4: 200, p5: 250 },
@@ -38,7 +35,7 @@ const PAYOUT_ARR = [
   { combination: `JACKS OR BETTER`, p1: 1, p2: 2, p3: 3, p4: 4, p5: 5 },
 ];
 
-// Define available options for coin value
+// 1.5 Define available options for coin value
 const COIN_VALUES = [0.25, 0.5, 1, 5];
 
 /*----- app's state (variables) -----*/
@@ -51,36 +48,41 @@ let coinValue;
 // 2.3 Use a bet amount variable to store the current bet amount.
 let betAmount;
 
-// 2.4. Use a hand array to represent the player's current hand. The hand will contain card objects from the deck.
-// 2.5. Use a boolean variable to track whether the player's hand is locked (cards on hold) or not.
+// 2.4. Use a hand array to represent the player's current hand and whether the player's card is locked (card on hold) or not. The hand will contain card objects from the deck.
 let hand = [];
+
+// 2.5. inHand variable determines if a player is playing the hand at the moment (true) or deciding on bet (false)
 let inHand;
 
+// 2.6. shuffledDeck variable stores a shuffled deck, excluding cards that have already been dealt or drawn
 let shuffledDeck = [];
 
+// 2.7 The dealDrawButtonValue variable stores a caption for an alternating button labeled either 'DEAL' or 'DRAW,' depending on whether a player is in possession of cards (in Hand) or not
 let dealDrawButtonValue;
 
+// 2.8 The cardEls variable stores card elements. It cannot be declared in 'cached element references' since the card elements are being dynamically changed
 let cardEls;
 
+// 2.9 The variable stores the final winning combination after the hand has been assessed.
 let winningCombination;
 
+// 2.10 The variable stores the count of the rounds (hands) within the same game. It is required to determine if it is a first round or not.
 let roundCount;
 
+// 2.11 The variable stores the credit score of an individual win round.
 let winResult;
 
+// 2.12 The virable stores the end of game text (GAME OVER or TRY ANOTHER BET)
 let endOfGameText;
 
 /*----- cached element references -----*/
 // 3.1. Store one element that represents the cards-container section.
 const cardsContainerEl = document.querySelector(".cards-container");
 
-// console.log(cardEls);
-
-// 3.2. Store one element that represents the Game Over text.
-const gameOverEl = document.getElementById("game-over");
-
-// 3.3. Store two elements that represent the Bet Amount display, and the Bet Input control.
+// 3.2. Store element that represents the Bet Amount display
 const betDisplayEl = document.getElementById("bet-display");
+
+// 3.3. Store three elements that represent Bet Input controls.
 const betPlusEl = document.getElementById("bet-plus");
 const betMinusEl = document.getElementById("bet-minus");
 const betInputEl = document.getElementById("bet-input");
@@ -100,30 +102,26 @@ const resultDisplayEl = document.getElementById("result-display");
 // 3.8. Store one element that represents the Replay button.
 const replayButtonEl = document.getElementById("replay");
 
-// 3.9. Store one element that represents the Sound Toggle.
-const soundToggleEl = document.getElementById("sound");
-
-// 3.10. Store one element that represents the Coin Value image.
+// 3.9. Store one element that represents the Coin Value button.
 const coinValueEl = document.getElementById("coin-value");
 
-// 3.11. Store one element that represents the Deal/Draw button.
+// 3.10. Store one element that represents the Deal/Draw button.
 const dealDrawEl = document.getElementById("deal-draw");
 
-// 3.12. Store one element that represent the holds-container section.
-const holdContainerEl = document.querySelector(".holds-container");
+// 3.11. Store one element that represent the holds-container section.
+const holdsContainerEl = document.querySelector(".holds-container");
 
-// 3.13. Store one element that represents the winning Card combination played.
+// 3.12. Store one element that represents the winning Card combination played.
 const winningCombPlayedEl = document.getElementById(
   "winning-card-combination-played"
 );
 
-// 3.14. Store one element that represents the "Play X credits" message appearing over the screen elements at the beginning of each round.
-const playXCreditsEl = document.getElementById("play-x-credits");
-// console.log(playXCreditsEl);
+// 3.13. Store one element that represents the "Play X credits" message appearing over the screen elements at the beginning of each round and at the end of the Game.
+const gameStatusTextEl = document.getElementById("game-status");
 
 /*----- event listeners -----*/
 
-// 5.1. Handle a player clickings a Card.
+// 5.1. Handle a player clickings a Card. The function is inside renderHoldsContainer() since the card elements are dynamically changed within container
 
 // 5.2. Handle a player clickings "+"/"-" buttons for the bet amount.
 function handleClickBetPlus() {
@@ -131,6 +129,7 @@ function handleClickBetPlus() {
   endOfGameText = checkEndOfGame();
   render();
 }
+
 function handleClickBetMinus() {
   if (betAmount > 1) betAmount--;
   endOfGameText = checkEndOfGame();
@@ -144,9 +143,7 @@ function handleClickMaxBet() {
   render();
 }
 
-// 5.4. Handle a player clickings the Sound Toggle.
-
-// 5.5. Handle a player clickings the Coin Value image.
+// 5.4. Handle a player clickings the Coin Value button.
 function handleClickCoinValue() {
   for (let i = 0; i < COIN_VALUES.length; i++) {
     if (COIN_VALUES[i] === coinValue) {
@@ -162,27 +159,17 @@ function handleClickCoinValue() {
   render();
 }
 
-// 5.6. Handle a player clickings the the Deal/Draw button.
+// 5.5. Handle a player clickings the Deal/Draw button.
 function handleClickDealDraw() {
-  inHand = true;
-
   if (dealDrawButtonValue === `DRAW`) {
-    DrawFromShuffledDeck();
-    winningCombination = checkWinningCombination(hand);
-    // console.log(winningCombination);
-    if (winningCombination) {
-      PAYOUT_ARR.forEach((item) => {
-        if (item.combination === winningCombination) {
-          winResult = item[`p${betAmount}`];
-        }
-      });
-
-      creditBalance += winResult * coinValue;
-    }
+    drawFromShuffledDeck();
+    winningCombination = getWinningCombination(hand);
+    winResult = getwinResult(winningCombination);
+    creditBalance += winResult * coinValue;
     endOfGameText = checkEndOfGame();
     roundCount++;
-    dealDrawButtonValue = `DEAL`;
     inHand = false;
+    dealDrawButtonValue = `DEAL`;
   } else if (dealDrawButtonValue === `DEAL`) {
     creditBalance -= betAmount * coinValue;
     winResult = null;
@@ -198,50 +185,63 @@ function handleClickDealDraw() {
 
 // 6. Handle a player clickings the Replay button:
 function handleClickReplay() {
+  //6.1. Do steps 4.1 (initialize the state variables) and 4.2 (render).
   init();
   render();
 }
 
 /*----- functions -----*/
+
+//4.1. Initialize the state variables:
 function init() {
   // 4.1.1. Initialize the player's credit balance to a starting amount of $100.
   creditBalance = 100;
 
-  // 4.1.2. Set the coin value to a default value of 0.25 cents.
+  // 4.1.2. Set the coin value to a default value of $1.
   if (!coinValue) coinValue = COIN_VALUES[2];
-  //   console.log(coinValue);
+
   // 4.1.3. Set the bet amount to a default value of one.
   if (!betAmount) betAmount = 1;
 
-  // Create a copy of the originalDeck (leave originalDeck untouched!)
+  // 4.1.4. Create a shuffled copy of the originalDeck (leave originalDeck untouched!)
   shuffledDeck = getNewShuffledDeck();
-  // Getting Hand
+
+  // 4.1.5. Getting Hand from shuffledDeck
   DealFromShuffledDeck();
 
+  // 4.1.6. Setting initial caption of "DEAL" for the Deal/Draw button
   dealDrawButtonValue = `DEAL`;
 
+  //4.1.7 Setting the winning Card combination played to empty string.
   winningCombination = ``;
 
-  roundCount = 1;
+  //4.1.8 Setting the count of the rounds (hands) to 0.
+  roundCount = 0;
 
+  //4.1.9 Setting the endOfGameText to empty string.
   endOfGameText = ``;
 
-  betMinusEl.addEventListener("click", handleClickBetMinus);
-  betPlusEl.addEventListener("click", handleClickBetPlus);
-  replayButtonEl.addEventListener("click", handleClickReplay);
-  maxBetEl.addEventListener("click", handleClickMaxBet);
-  coinValueEl.addEventListener("click", handleClickCoinValue);
-  dealDrawEl.addEventListener("click", handleClickDealDraw);
-
+  //4.1.10 Setting the inHand variable to false (a player is not playing a hand).
   inHand = false;
 
+  //4.1.11 Setting up six listeners for REPLAY button, +/- Bet buttons, Coin  Value button, BET MAX button and DEAL/DRAW button.
+  replayButtonEl.addEventListener("click", handleClickReplay);
+  betMinusEl.addEventListener("click", handleClickBetMinus);
+  betPlusEl.addEventListener("click", handleClickBetPlus);
+  coinValueEl.addEventListener("click", handleClickCoinValue);
+  maxBetEl.addEventListener("click", handleClickMaxBet);
+  dealDrawEl.addEventListener("click", handleClickDealDraw);
+
+  //4.2 Render those state variables to the page
   render();
 }
 
 function render() {
   renderPayTable();
   renderWinningCombPlayed();
+  rendergameStatusText();
   renderCardsContainer();
+  renderHoldsContainer();
   renderDisplayLineContainer();
   renderButtonsContainer();
 }
@@ -256,7 +256,6 @@ function renderPayTable() {
     for (let key in arrItem) {
       if (Number(arrItem[key])) {
         payTableHtml += `<td class="payout-column">${arrItem[key]}</td>`;
-        // console.log(arrItem[key], true);
       } else {
         payTableHtml += `<td class="poker-hands-column">${arrItem[key]}</td>`;
       }
@@ -276,68 +275,56 @@ function renderWinningCombPlayed() {
   //Output played winning combination if applicable
   if (!inHand) {
     winningCombPlayedEl.innerText = winningCombination;
-    console.log(endOfGameText);
-    if (betAmount === 1) {
-      playXCreditsEl.innerText = `PLAY ${betAmount} CREDIT`;
-    } else if (endOfGameText) {
-      winningCombPlayedEl.innerText = ``;
-      playXCreditsEl.innerText = endOfGameText;
-    } else {
-      playXCreditsEl.innerText = `PLAY ${betAmount} CREDITS`;
-    }
   } else {
     winningCombPlayedEl.innerText = ``;
-    playXCreditsEl.innerText = ``;
   }
 }
 
+function rendergameStatusText() {
+  if (!inHand) {
+    if (betAmount === 1) {
+      gameStatusTextEl.innerText = `PLAY ${betAmount} CREDIT`;
+    } else if (endOfGameText) {
+      gameStatusTextEl.innerText = endOfGameText;
+    } else {
+      gameStatusTextEl.innerText = `PLAY ${betAmount} CREDITS`;
+    }
+  } else {
+    gameStatusTextEl.innerText = ``;
+  }
+}
+
+function renderCardsContainer() {
+  getDeckInContainer(hand, cardsContainerEl);
+}
+
 function renderHoldsContainer() {
+  //addingEventListeners for the card elements
   const cardEls = document.querySelectorAll(".cards-container > div");
   if (inHand) {
     cardEls.forEach((card, index) => {
+      // 5.1. Handle a player clickings a Card. The function is inside renderHoldsContainer() since the card elements are dynamically changed within container
       card.addEventListener(`click`, () => {
         if (hand[index].hold) {
           hand[index].hold = false;
         } else {
           hand[index].hold = true;
         }
-        // console.log(index, hand[index]);
         render();
       });
     });
   }
-  //   } else {
-  //     cardEls.forEach((card, index) => {
-  //       card.removeEventListener(`click`, () => {
-  //         if (hand[index].hold) {
-  //           hand[index].hold = false;
-  //         } else {
-  //           hand[index].hold = true;
-  //         }
-  //         console.log(index, hand[index]);
-  //       });
-  //     });
-  //   }
-
-  holdContainerEl.innerHTML = "";
-  // Let's build the cards as a string of HTML
+  holdsContainerEl.innerHTML = "";
+  // Let's build the holds as a string of HTML
   let holdsHtml = "";
   hand.forEach(function (card) {
-    // console.log(card);
-    if (inHand) {
-      if (card.hold) {
-        holdsHtml += `<div>HOLD</div>`;
-      } else {
-        holdsHtml += `<div></div>`;
-      }
+    if (card.hold) {
+      holdsHtml += `<div>HOLD</div>`;
+    } else {
+      holdsHtml += `<div></div>`;
     }
   });
-  holdContainerEl.innerHTML = holdsHtml;
-}
-
-function renderCardsContainer() {
-  renderDeckInContainer(hand, cardsContainerEl);
-  renderHoldsContainer();
+  holdsContainerEl.innerHTML = holdsHtml;
 }
 
 function renderDisplayLineContainer() {
@@ -351,7 +338,7 @@ function renderDisplayLineContainer() {
 function renderButtonsContainer() {
   //set bet input value
   betInputEl.innerText = `BET ${betAmount}`;
-  coinValueEl.innerText = `COIN $${coinValue}`;
+  coinValueEl.innerText = `$${coinValue}`;
   dealDrawEl.innerText = dealDrawButtonValue;
   if (inHand) {
     betMinusEl.setAttribute(`disabled`, `true`);
@@ -381,21 +368,17 @@ function renderButtonsContainer() {
   }
 }
 
-function renderDeckInContainer(deck, container) {
+function getDeckInContainer(deck, container) {
   container.innerHTML = "";
   // Let's build the cards as a string of HTML
   let cardsHtml = "";
   deck.forEach(function (card) {
-    if (roundCount === 1 && !inHand) {
+    if (roundCount === 0 && !inHand) {
       cardsHtml += `<div class="card back-red"></div>`;
     } else {
       cardsHtml += `<div class="card ${card.face}"></div>`;
     }
   });
-  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-  // const cardsHtml = deck.reduce(function(html, card) {
-  //   return html + `<div class="card ${card.face}"></div>`;
-  // }, '');
   container.innerHTML = cardsHtml;
 }
 
@@ -414,7 +397,6 @@ function buildOriginalDeck(suitsArr, ranksArr) {
       });
     });
   });
-  //   console.log(deck);
   return deck;
 }
 
@@ -433,26 +415,21 @@ function getNewShuffledDeck() {
 }
 
 function DealFromShuffledDeck() {
-  // console.log();
-
   hand = [];
   for (let i = 0; i < 5; i++) {
     hand.push(shuffledDeck.splice(0, 1)[0]);
-    // console.log(hand[i]);
   }
 }
 
-function DrawFromShuffledDeck() {
-  // console.log();
+function drawFromShuffledDeck() {
   hand.forEach((card, index) => {
     if (!card.hold) {
       hand.splice(index, 1, shuffledDeck.splice(0, 1)[0]);
     }
-    // console.log (hand[index]);
   });
 }
 
-function checkWinningCombination(cards) {
+function getWinningCombination(cards) {
   // Count the occurrences of each rank and suit
   const rankCounts = {};
   const suitCounts = {};
@@ -532,6 +509,20 @@ function checkWinningCombination(cards) {
     return ``;
   }
 }
+function getwinResult(winComb) {
+  if (winComb) {
+    let result;
+    PAYOUT_ARR.forEach((item) => {
+      if (item.combination === winComb) {
+        result = item[`p${betAmount}`];
+      }
+    });
+    return result;
+  } else {
+    result = 0;
+    return result;
+  }
+}
 
 // Helper function to check if all cards have the same suit
 function isSameSuit(cards) {
@@ -558,5 +549,3 @@ function checkEndOfGame() {
 /*----- Start game -----*/
 
 init();
-
-// renderNewShuffledDeck();
