@@ -2,7 +2,7 @@
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
   user-select: none;
-  /* border: 1px solid red; */
+  border: 1px solid red;
 }
 
 body {
@@ -28,12 +28,9 @@ main {
   text-shadow: 1px 1px 0px rgb(246, 239, 70), -1px -1px 0px rgb(246, 239, 70),
     1px -1px 0px rgb(246, 239, 70), -1px 1px 0px rgb(246, 239, 70);
   position: absolute;
-  top: 53%; 
-  left: 50%; 
-  transform: translate(
-    -50%,
-    -50%
-  );
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 9999;
   background-color: blue;
   padding: 0 20px 0 20px;
@@ -155,4 +152,47 @@ td:nth-child(n + 1) {
 #bet-input {
   margin: 0;
   font-size: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  /* body {
+      tablet - two column display
+      grid-template-columns: 1fr 4fr;
+      grid-template-rows: 50px auto 30px;
+      grid-template-areas: 
+        "hdr hdr"
+        "side content"
+        "ftr ftr";
+    }
+  } */
+
+  table {
+    font-size: 18px;
+  }
+
+  .card {
+    width: 4em;
+    height: 5.5em;
+  }
+
+  #balance-display,
+  #result-display {
+    font-size: 20px;
+    width: 160px;
+  }
+
+  #game-status {
+    font-size: 26px;
+    top: 49%;
+    padding: 0 10px 0 10px;
+  }
+
+  .button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    
+  }
+
+
 }
