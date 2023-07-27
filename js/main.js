@@ -415,6 +415,9 @@ function getNewShuffledDeck() {
 }
 
 function DealFromShuffledDeck() {
+  hand.forEach((card) => {
+    card.hold = false;
+  });
   hand = [];
   for (let i = 0; i < 5; i++) {
     hand.push(shuffledDeck.splice(0, 1)[0]);
