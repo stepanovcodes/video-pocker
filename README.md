@@ -61,3 +61,22 @@ __Replay:__ the player can choose to restart playing at any time by pressing Rep
 7. Adding flashing to Deal button: Adding a flashing effect or visual feedback to the Deal button to attract attention and indicate its availability for the next round.
 
 
+## Feedback on Game Made by the Instructor and the Peers
+
+1. Might be cool to see a ‘video poker’ cabinet with a CRT bubble screen and maybe a filter to overlay to add a pixelated view.
+
+2. Keep exploring your card evaluation system for win conditions - but overall very thoroughly impressive.
+
+3. Consider migrating your core features of your game into discrete JS modules and import your modules on load. Allowing you to keep your JS script files smaller and more management for development.
+
+4. Would love to see a more dynamic background.
+
+5. Despite me really like the feel/UI, a modern version of it would be really cool. maybe a choice between the two.
+
+6. Would love some in-game instructions for people like me who don’t know how to play poker.
+
+7. Could add fun sound effects to go along with the beautiful graphics you already have.
+
+
+
+
