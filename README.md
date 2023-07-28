@@ -14,9 +14,6 @@ The history of Video Poker can be traced back to the early 1970s, making it one 
 ### Dektop version
 ![Video Poker Desktop](/assets/Jacks%20or%20Better%20desktop.png)
 
-### Mobile version
-![Video Poker Monile iPhone14](/assets/Jacks%20or%20Better%20desktop%20iPhone14.jpg)
-
 ## Technology used
 - HTML
 - JavaScript
