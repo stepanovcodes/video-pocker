@@ -2,7 +2,7 @@
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
   user-select: none;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 body {
@@ -155,19 +155,26 @@ td:nth-child(n + 1) {
 }
 
 @media only screen and (max-width: 768px) {
-  /* body {
-      tablet - two column display
-      grid-template-columns: 1fr 4fr;
-      grid-template-rows: 50px auto 30px;
-      grid-template-areas: 
-        "hdr hdr"
-        "side content"
-        "ftr ftr";
-    }
-  } */
 
   table {
-    font-size: 18px;
+    font-size: 12px;
+  }
+
+  #winning-card-combination-played {
+    height: 2rem;
+    margin: 0;
+  }
+
+  .holds-container {
+    height: 1.5rem;
+  }
+
+  .holds-container > div {
+    font-size: 16px;
+  }
+
+  .cards-container {
+    height: 6rem;
   }
 
   .card {
@@ -177,13 +184,21 @@ td:nth-child(n + 1) {
 
   #balance-display,
   #result-display {
-    font-size: 20px;
+    font-size: 18px;
     width: 160px;
   }
 
+  #bet-display {
+    font-size: 18px;
+  }
+
+  .display-line-container {
+    height: 2rem;
+  }
+
   #game-status {
-    font-size: 26px;
-    top: 49%;
+    font-size: 20px;
+    top: 38%;
     padding: 0 10px 0 10px;
   }
 
@@ -191,8 +206,27 @@ td:nth-child(n + 1) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
-    
   }
 
+  .btn {
+    margin: 0.5rem auto;
+  }
 
+  .btn:hover {
+    background-color: rgb(246, 239, 70);
+  }
+
+  #bet-input-container {
+    margin: 0.5rem auto;
+  }
+
+  #deal-draw {
+    grid-column: 1 / span 2;
+    width: 200px;
+    font-size: 30px;
+  }
+  .cards-container > div:hover {
+    margin: 5px;
+  }
+  
 }
