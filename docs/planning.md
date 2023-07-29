@@ -71,8 +71,7 @@ Video Poker gained popularity quickly, as it provided a combination of elements 
     
     2.11. Use winResult variable to store the credit score of an individual win round.
 
-    2.12. Use endOfGameText virable to store the end of game text (GAME OVER or TRY ANOTHER BET)
-let endOfGameText.
+    2.12. Use endOfGameText virable to store the end of game text (GAME OVER or TRY ANOTHER BET).
 
 3. Store elements on the page:
 
