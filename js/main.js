@@ -435,10 +435,8 @@ function drawFromShuffledDeck() {
 function getWinningCombination(cards) {
   // Count the occurrences of each rank and suit
   const rankCounts = {};
-  const suitCounts = {};
   cards.forEach((card) => {
     rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1;
-    suitCounts[card.suit] = (suitCounts[card.suit] || 0) + 1;
   });
 
   // Check for all nine winning combinations, in order of highest to lowest score
@@ -452,51 +450,31 @@ function getWinningCombination(cards) {
   ) {
     // Royal Flush
     return PAYOUT_ARR[0].combination;
-  } else if (
-    rankCounts["10"] === 1 &&
-    rankCounts["J"] === 1 &&
-    rankCounts["Q"] === 1 &&
-    rankCounts["K"] === 1 &&
-    rankCounts["A"] === 1
-  ) {
+  } else if (hasStraight(cards) && isSameSuit(cards)) {
     // Straight Flush
     return PAYOUT_ARR[1].combination;
-  } else if (Object.values(rankCounts).some((count) => count === 4)) {
+  } else if (Object.values(rankCounts).some((rankCount) => rankCount === 4)) {
     // Four of a Kind
     return PAYOUT_ARR[2].combination;
   } else if (
-    rankCounts["J"] === 2 &&
-    rankCounts["Q"] === 2 &&
-    rankCounts["K"] === 2
+    Object.values(rankCounts).some((rankCount) => rankCount === 3) &&
+    Object.values(rankCounts).some((rankCount) => rankCount === 2)
   ) {
     // Full House
     return PAYOUT_ARR[3].combination;
-  } else if (Object.values(suitCounts).some((count) => count === 5)) {
+  } else if (isSameSuit(cards)) {
     // Flush
     return PAYOUT_ARR[4].combination;
-  } else if (
-    (rankCounts["10"] === 1 &&
-      rankCounts["J"] === 1 &&
-      rankCounts["Q"] === 1 &&
-      rankCounts["K"] === 1 &&
-      rankCounts["A"] === 1) ||
-    (rankCounts["2"] === 1 &&
-      rankCounts["3"] === 1 &&
-      rankCounts["4"] === 1 &&
-      rankCounts["5"] === 1 &&
-      rankCounts["A"] === 1)
-  ) {
+  } else if (hasStraight(cards)) {
     // Straight
     return PAYOUT_ARR[5].combination;
-  } else if (
-    rankCounts["J"] === 3 ||
-    rankCounts["Q"] === 3 ||
-    rankCounts["K"] === 3 ||
-    rankCounts["A"] === 3
-  ) {
+  } else if (Object.values(rankCounts).some((rankCount) => rankCount === 3)) {
     // Three of a Kind
     return PAYOUT_ARR[6].combination;
-  } else if (rankCounts["J"] === 2 && rankCounts["Q"] === 2) {
+  } else if (
+    Object.values(rankCounts).filter((rankCount) => rankCount === 2).length ===
+    2
+  ) {
     // Two Pair
     return PAYOUT_ARR[7].combination;
   } else if (
@@ -512,6 +490,47 @@ function getWinningCombination(cards) {
     return ``;
   }
 }
+
+// Helper function to check if there is a straight combination
+function hasStraight(cards) {
+  for (let i = 0; i < cards.length; i++) {
+    cards[i].order = i;
+  }
+  cards.sort((a, b) => RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank));
+  let rankIndex = RANKS.indexOf(cards[0].rank);
+  let straight;
+  if (rankIndex > 8) {
+    straight = false;
+    cards.sort((a, b) => a.order - b.order);
+    return straight;
+  }
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i].rank === RANKS[rankIndex + i]) {
+      straight = true;
+    } else if (
+      i === cards.length - 1 &&
+      RANKS[rankIndex + i] === "06" &&
+      cards[i].rank === "A"
+    ) {
+      straight = true;
+    } else {
+      straight = false;
+      break;
+    }
+    if (RANKS[rankIndex] === "A") {
+      rankIndex = -1;
+    }
+  }
+  cards.sort((a, b) => a.order - b.order);
+  return straight;
+}
+
+// Helper function to check if all cards have the same suit
+function isSameSuit(cards) {
+  const firstSuit = cards[0].suit;
+  return cards.every((card) => card.suit === firstSuit);
+}
+
 function getwinResult(winComb) {
   if (winComb) {
     let result;
@@ -525,12 +544,6 @@ function getwinResult(winComb) {
     result = 0;
     return result;
   }
-}
-
-// Helper function to check if all cards have the same suit
-function isSameSuit(cards) {
-  const firstSuit = cards[0].suit;
-  return cards.every((card) => card.suit === firstSuit);
 }
 
 function checkEndOfGame() {
