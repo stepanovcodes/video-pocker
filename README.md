@@ -77,6 +77,23 @@ __Replay:__ the player can choose to restart playing at any time by pressing Rep
 
 7. Could add fun sound effects to go along with the beautiful graphics you already have.
 
+# Project 1 notes:
+
+## Glows:
+
+1. Some of the best documented code I’ve seen from a student at GA, period; well structured, well ordered code. While it might be possible to refactor or rebuild your game using JS classes and OOP syntax, I this this code works. So come back to it only after you have completed the program.
+
+2. As for the comments, when your codebase expands or functionality changes, it might become more challenge to keep your code/comments in sync and organized. One approach would involve migrate some of your assets / dom variables into separate JS ES modules that can be imported and exported as needed.
+
+3. A second approach would involve refactoring your comments for core / complex functions using JS doc strings - there are some build in VScode extensions that also provide easy templates. These can be folded up and then displayed on a hover using VSCodes built in docstring interpreter.
+
+## Grows:
+
+There may be some additional features to debug, but the current project works and plays well.
+To answer your questions about testing, there might be two ways to handle this:
+1. Write a custom series of test functions that will accept sample hands and evaluate the inputs, since your hand data involves analyzing and parsing arrays of string cards, thought be relatively easy to implement in isolation with different imported hand configurations.
+2. You might look into a testing framework like Jasmine or Cypress that will allow you to test actual working code in your current game, writing tests to evaluate what should be expected from global values, down to DOM state. Basic tutorial can be found here for Jasmine, or you can refer to Cypress’ documentation for a more robust walkthrough.
+
 
 
 
